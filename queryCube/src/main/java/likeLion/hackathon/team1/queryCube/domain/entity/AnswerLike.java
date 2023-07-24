@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
@@ -11,7 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Where(clause = "deleted = false")
+@Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE answerLike SET deleted = true WHERE answer_like_id = ?")
 public class AnswerLike {
 
@@ -26,5 +27,7 @@ public class AnswerLike {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Answer answer_id;
+
+    private boolean deleted = Boolean.FALSE;
 
 }

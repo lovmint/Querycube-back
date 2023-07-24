@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Where(clause = "deleted = false")
+@Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE answer SET deleted = true WHERE answer_id = ?")
 public class Answer{
 
@@ -45,6 +45,8 @@ public class Answer{
 
     private Boolean isQuestioner_like;
 
+    private boolean deleted = Boolean.FALSE;
+
     public static Answer toAnswer(AnswerDto dto, Question room, Member user) {
 
 
@@ -59,4 +61,5 @@ public class Answer{
 
 
     }
+
 }

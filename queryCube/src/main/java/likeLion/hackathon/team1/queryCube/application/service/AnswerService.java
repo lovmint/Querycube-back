@@ -70,5 +70,20 @@ public class AnswerService {
         return fundingListInRoom.stream().map(AnswerDto::from).collect(Collectors.toList());
     }
 
+    @Transactional
+    public void deleteAnswer(Long answer_Id){
+        System.out.println("roomId = " + answer_Id);
+        answerRepository.deleteById(answer_Id);
+    }
+
+
+    public Long changeAnswerInfo(AnswerDto dto, Long answer_id){
+        Answer answer = answerRepository.findById(answer_id).orElseThrow(() -> new IllegalArgumentException("no such room"));
+        answer.setAnswer_sentence(dto.getAnswer_sentence());
+
+
+        Answer updatedAnswer = answerRepository.save(answer);
+        return updatedAnswer.getAnswer_id();
+    }
 
 }

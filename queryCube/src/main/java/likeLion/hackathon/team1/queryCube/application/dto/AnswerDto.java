@@ -45,7 +45,14 @@ public class AnswerDto {
                 .build();
     }
 
-    public static AnswerDto from(Answer answer) {
+    public static AnswerDto from(AddAnswerRequest request) {
+        return AnswerDto.builder()
+                .answer_sentence(request.getAnswer_sentence())
+                .build();
+    }
+
+
+        public static AnswerDto from(Answer answer) {
         return AnswerDto.builder()
                 .answer_id(answer.getAnswer_id())
                 .answerer_id(answer.getAnswerer_id())
