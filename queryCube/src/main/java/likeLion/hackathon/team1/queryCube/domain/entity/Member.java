@@ -20,10 +20,10 @@ public class Member {
     private Long member_id;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private Region region_id;
 
     private String name;
 
-    private Integer point;
+    private Integer reward_point;
 }
