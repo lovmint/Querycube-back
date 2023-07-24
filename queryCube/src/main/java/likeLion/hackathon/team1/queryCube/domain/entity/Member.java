@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Getter
@@ -11,7 +12,7 @@ import org.hibernate.annotations.SQLDelete;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@Where(clause = "deleted = false")
+@Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE member SET deleted = true WHERE member_id = ?")
 public class Member {
 
