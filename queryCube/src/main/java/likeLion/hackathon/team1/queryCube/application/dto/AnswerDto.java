@@ -4,6 +4,7 @@ package likeLion.hackathon.team1.queryCube.application.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import likeLion.hackathon.team1.queryCube.domain.entity.Answer;
 import likeLion.hackathon.team1.queryCube.domain.entity.Member;
 import likeLion.hackathon.team1.queryCube.domain.entity.Question;
 import likeLion.hackathon.team1.queryCube.presentation.request.AddAnswerRequest;
@@ -41,6 +42,18 @@ public class AnswerDto {
                 .answer_sentence(request.getAnswer_sentence())
                 .isActive(false)
                 .isQuestioner_like(false)
+                .build();
+    }
+
+    public static AnswerDto from(Answer answer) {
+        return AnswerDto.builder()
+                .answer_id(answer.getAnswer_id())
+                .answerer_id(answer.getAnswerer_id())
+                .question_id(answer.getQuestion_id())
+                .answer_sentence(answer.getAnswer_sentence())
+                .create_date(answer.getCreate_date())
+                .isActive(answer.getIsActive())
+                .isQuestioner_like(answer.getIsQuestioner_like())
                 .build();
     }
 }

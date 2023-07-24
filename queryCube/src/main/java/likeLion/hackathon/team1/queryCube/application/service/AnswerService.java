@@ -41,4 +41,34 @@ public class AnswerService {
         Answer newAnswer = answerRepository.save(Answer.toAnswer(dto, question, member));
         return newAnswer.getAnswer_id();
     }
+
+    @Transactional
+    public List<AnswerDto> getAllAnswerListInMember(Long member_id){
+        List<Answer> fundingList = answerRepository.findAll();
+        List<Answer> fundingListInRoom = new ArrayList<>();
+
+        for(Answer f : fundingList){
+            if(f.getAnswerer_id().getMember_id() == member_id){
+                fundingListInRoom.add(f);
+            }
+        }
+
+        return fundingListInRoom.stream().map(AnswerDto::from).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public List<AnswerDto> getAllAnswerListInQuestion(Long question_id){
+        List<Answer> fundingList = answerRepository.findAll();
+        List<Answer> fundingListInRoom = new ArrayList<>();
+
+        for(Answer f : fundingList){
+            if(f.getQuestion_id().getQuestion_id() == question_id){
+                fundingListInRoom.add(f);
+            }
+        }
+
+        return fundingListInRoom.stream().map(AnswerDto::from).collect(Collectors.toList());
+    }
+
+
 }
