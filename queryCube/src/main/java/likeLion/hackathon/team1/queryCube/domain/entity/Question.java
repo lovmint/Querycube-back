@@ -1,10 +1,13 @@
 package likeLion.hackathon.team1.queryCube.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Entity
@@ -29,8 +32,14 @@ public class Question {
     @ManyToOne(fetch = FetchType.LAZY)
     private Category category_id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String question_sentence;
 
-    private String create_date;
+    //날짜 저절로 생성하게 됨.
+    @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @Column(updatable = false)
+    private LocalDateTime create_date;
+
+    private Boolean isNotification_status;
 }
