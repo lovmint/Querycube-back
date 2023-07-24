@@ -42,4 +42,6 @@ public class Question {
     private LocalDateTime create_date;
 
     private Boolean isNotification_status;
+
+    private boolean deleted = Boolean.FALSE;
 }

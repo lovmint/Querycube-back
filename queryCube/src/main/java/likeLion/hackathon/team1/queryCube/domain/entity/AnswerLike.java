@@ -27,4 +27,6 @@ public class AnswerLike {
     @ManyToOne(fetch = FetchType.LAZY)
     private Answer answer_id;
 
+    private boolean deleted = Boolean.FALSE;
+
 }

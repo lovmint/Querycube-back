@@ -26,4 +26,6 @@ public class Member {
     private String name;
 
     private Integer reward_point;
+
+    private boolean deleted = Boolean.FALSE;
 }
