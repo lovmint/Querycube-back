@@ -25,6 +25,7 @@ public class AnswerInfoResponse {
     private String answer_sentence;
     private Boolean isActive;
     private Boolean isQuestioner_like;
+    private Boolean isLike_active;
     private LocalDateTime create_date;
 
     public static AnswerInfoResponse from (AnswerDto answerDto){
@@ -36,6 +37,7 @@ public class AnswerInfoResponse {
                 .create_date(answerDto.getCreate_date())
                 .isActive(answerDto.getIsActive())
                 .isQuestioner_like(answerDto.getIsQuestioner_like())
+                .isLike_active(answerDto.getIsLike_active())
                 .build();
     }
 }

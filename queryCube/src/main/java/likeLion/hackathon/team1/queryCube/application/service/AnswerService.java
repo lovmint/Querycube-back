@@ -4,8 +4,10 @@ package likeLion.hackathon.team1.queryCube.application.service;
 
 import likeLion.hackathon.team1.queryCube.application.dto.AnswerDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.Answer;
+import likeLion.hackathon.team1.queryCube.domain.entity.AnswerLike;
 import likeLion.hackathon.team1.queryCube.domain.entity.Member;
 import likeLion.hackathon.team1.queryCube.domain.entity.Question;
+import likeLion.hackathon.team1.queryCube.domain.repository.AnswerLikeRepository;
 import likeLion.hackathon.team1.queryCube.domain.repository.AnswerRepository;
 import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
 import likeLion.hackathon.team1.queryCube.domain.repository.QuestionRepository;
@@ -29,6 +31,7 @@ public class AnswerService {
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
     private final AnswerRepository answerRepository;
+    private final AnswerLikeRepository answerLikeRepository;
 
     @Transactional
     public Long addAnswer(AnswerDto dto, Long question_id, Long answerer_member_id){
@@ -57,17 +60,26 @@ public class AnswerService {
     }
 
     @Transactional
-    public List<AnswerDto> getAllAnswerListInQuestion(Long question_id){
+    public List<AnswerDto> getAllAnswerListInQuestion(Long question_id, Long member_id){
         List<Answer> fundingList = answerRepository.findAll();
-        List<Answer> fundingListInRoom = new ArrayList<>();
+        //List<Answer> fundingListInRoom = new ArrayList<>();
+        List<AnswerDto> fundingDtoListInRoom = new ArrayList<>();
+
+        System.out.println(member_id);
 
         for(Answer f : fundingList){
             if(f.getQuestion_id().getQuestion_id() == question_id){
-                fundingListInRoom.add(f);
+                //fundingListInRoom.add(f);
+                AnswerDto dto = AnswerDto.from(f);
+                dto.setIsLike_active(findAnswerLike(dto.getAnswer_id(), member_id));
+                fundingDtoListInRoom.add(dto);
             }
         }
 
-        return fundingListInRoom.stream().map(AnswerDto::from).collect(Collectors.toList());
+
+
+
+        return fundingDtoListInRoom;
     }
 
     @Transactional
@@ -84,6 +96,46 @@ public class AnswerService {
 
         Answer updatedAnswer = answerRepository.save(answer);
         return updatedAnswer.getAnswer_id();
+    }
+
+    public Boolean saveLike(Long answer_id, Long member_id) {
+        Answer answer = answerRepository.findById(answer_id).orElseThrow(() -> new IllegalArgumentException("no such room"));
+        Member member = memberRepository.findById(member_id).orElseThrow(() -> new IllegalArgumentException("no such room"));
+
+        List<AnswerLike> findAnswerLike = answerLikeRepository.findByLikerIdAndAnswerId(member, answer);
+
+        //System.out.println(findAnswerLike.isEmpty());
+        if (findAnswerLike.isEmpty()){
+
+            AnswerLike answerLike = AnswerLike.toAnswerLike(member, answer);
+            answerLikeRepository.save(answerLike);
+            //br.plusLike(boardId);
+            return true;
+        }else {
+            //System.out.println(findAnswerLike.size());
+            answerLikeRepository.deleteById(findAnswerLike.get(0).getAnswer_like_id());
+            //answerLikeRepository.deleteByLikerIdAndAnswerId(member, answer);
+            //br.minusLike(boardId);
+            return false;
+
+        }
+
+    }
+
+    public boolean findAnswerLike(Long answer_id, Long member_id) {
+        // 저장된 DTO 가 없다면 0, 있다면 1
+        Answer answer = answerRepository.findById(answer_id).orElseThrow(() -> new IllegalArgumentException("no such room"));
+        Member member = memberRepository.findById(member_id).orElseThrow(() -> new IllegalArgumentException("no such room"));
+
+        List<AnswerLike> findAnswerLike = answerLikeRepository.findByLikerIdAndAnswerId(member, answer);
+
+
+        if (findAnswerLike.isEmpty()){
+            return false;
+        }else {
+
+            return true;
+        }
     }
 
 }

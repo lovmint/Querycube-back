@@ -39,9 +39,10 @@ public class AnswerController {
     }
 
     //질문별 답변 리스트
-    @GetMapping("/answer-list-inQuestion/{question_id}")
-    public ResponseEntity<List<AnswerInfoResponse>> getAllAnswerListInQuestion(@PathVariable Long question_id) {
-        List<AnswerDto> roomDtoList = answerService.getAllAnswerListInQuestion(question_id);
+    @GetMapping("/answer-list-inQuestion/{question_id}/{member_id}")
+    public ResponseEntity<List<AnswerInfoResponse>> getAllAnswerListInQuestion(@PathVariable Long question_id, @PathVariable Long member_id) {
+        System.out.println(member_id);
+        List<AnswerDto> roomDtoList = answerService.getAllAnswerListInQuestion(question_id, member_id);
         List<AnswerInfoResponse> response = roomDtoList.stream()
                 .map(AnswerInfoResponse::from)
                 .collect(Collectors.toList());
@@ -58,6 +59,13 @@ public class AnswerController {
     public ResponseEntity<Void> changeAnswerStatus (@RequestBody AddAnswerRequest request, @PathVariable Long answer_id) {
         Long updatedId = answerService.changeAnswerInfo(AnswerDto.from(request), answer_id);
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/like/{answer_id}/{member_id}")
+    public ResponseEntity<Boolean> like(@PathVariable Long answer_id, @PathVariable Long member_id) {
+        Boolean result = answerService.saveLike(answer_id, member_id);
+        System.out.println(result);
+        return ResponseEntity.ok(result);
     }
 
 
