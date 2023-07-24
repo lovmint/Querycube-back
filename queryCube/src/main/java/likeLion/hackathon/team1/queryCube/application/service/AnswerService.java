@@ -77,4 +77,13 @@ public class AnswerService {
     }
 
 
+    public Long changeAnswerInfo(AnswerDto dto, Long answer_id){
+        Answer answer = answerRepository.findById(answer_id).orElseThrow(() -> new IllegalArgumentException("no such room"));
+        answer.setAnswer_sentence(dto.getAnswer_sentence());
+
+
+        Answer updatedAnswer = answerRepository.save(answer);
+        return updatedAnswer.getAnswer_id();
+    }
+
 }

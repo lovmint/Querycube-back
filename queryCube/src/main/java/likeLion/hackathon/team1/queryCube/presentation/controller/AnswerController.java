@@ -49,8 +49,14 @@ public class AnswerController {
     }
 
     @DeleteMapping("/{answer_id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Long answer_id ) {
+    public ResponseEntity<Void> deleteById(@PathVariable Long answer_id) {
         answerService.deleteAnswer(answer_id);
+        return ResponseEntity.ok(null);
+    }
+
+    @PatchMapping("/{answer_id}")
+    public ResponseEntity<Void> changeAnswerStatus (@RequestBody AddAnswerRequest request, @PathVariable Long answer_id) {
+        Long updatedId = answerService.changeAnswerInfo(AnswerDto.from(request), answer_id);
         return ResponseEntity.ok(null);
     }
 
