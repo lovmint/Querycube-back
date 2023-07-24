@@ -25,5 +25,5 @@ public class Member {
 
     private String name;
 
-    private Integer point;
+    private Integer reward_point;
 }
