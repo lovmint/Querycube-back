@@ -7,7 +7,10 @@ import likeLion.hackathon.team1.queryCube.application.dto.AnswerDto;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
@@ -18,6 +21,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Where(clause = "deleted = false")
+@EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE answer SET deleted = true WHERE answer_id = ?")
 public class Answer{
 
@@ -36,9 +40,9 @@ public class Answer{
     @Column(nullable = false, columnDefinition = "TEXT")
     private String answer_sentence;
 
-    //날짜 저절로 생성하게 됨.
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @Column(updatable = false)
     private LocalDateTime create_date;
 
     private Boolean isActive;
