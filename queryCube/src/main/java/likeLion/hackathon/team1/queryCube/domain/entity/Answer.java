@@ -37,7 +37,7 @@ public class Answer{
     private String answer_sentence;
 
     //날짜 저절로 생성하게 됨.
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @CreatedDate
     private LocalDateTime create_date;
 
