@@ -36,6 +36,12 @@ dependencies {
 	// https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
 	implementation 'javax.persistence:javax.persistence-api:2.2'
 
+	implementation 'javax.servlet:javax.servlet-api:4.0.1' // Use the appropriate version
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.session:spring-session-core' // Add Spring Session dependency for HttpSession
+
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client' // 구글 계정 연동 간편로그인
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 tasks.named('test') {
