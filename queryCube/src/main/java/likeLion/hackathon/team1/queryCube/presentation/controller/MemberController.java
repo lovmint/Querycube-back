@@ -29,7 +29,7 @@ public class MemberController {
         return member;
     }
 
-    // 로그아웃 기능을 위한 엔드포인트
+    // 로그아웃 기능추가를 위한 엔드포인트
     @PostMapping("/logout")
     public ResponseEntity<String> logout() {
         // 로그아웃 처리를 수행합니다.
