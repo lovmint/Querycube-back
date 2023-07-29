@@ -17,9 +17,6 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
-@Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE member SET deleted = true WHERE member_id = ?")
 public class Member {
 
     @Id
@@ -33,6 +30,8 @@ public class Member {
     private String name;
 
     private Integer reward_point;
+
+    private String googleId; // 구글 아이디 추가
 
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
