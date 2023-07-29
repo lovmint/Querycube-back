@@ -39,7 +39,7 @@ public class AnswerDto {
 
     private Boolean isActive;
 
-    private Boolean isQuestioner_like;
+    private Boolean isQuestioner_selection;
 
     private Boolean isLike_active;
 
@@ -50,7 +50,7 @@ public class AnswerDto {
                 .answer_sentence(request.getAnswer_sentence())
                 .answer_like_num(0)
                 .isActive(false)
-                .isQuestioner_like(false)
+                .isQuestioner_selection(false)
                 .build();
     }
 
@@ -72,7 +72,7 @@ public class AnswerDto {
                 .answer_like_num(answer.getAnswer_like_num())
                 .create_date(answer.getCreate_date())
                 .isActive(answer.getIsActive())
-                .isQuestioner_like(answer.getIsQuestioner_like())
+                .isQuestioner_selection(answer.getIsQuestioner_selection())
                 .build();
     }
 }

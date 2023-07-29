@@ -110,7 +110,7 @@ public class AnswerService {
             AnswerLike answerLike = AnswerLike.toAnswerLike(member, answer);
             //이 답글에 좋아요 누를 사람이 답글의 질문의 질문자인지 확인.
             if(answer.getQuestion_id().getQuestioner_id().getMember_id() == member_id){
-                answer.setIsQuestioner_like(true);
+                answer.setIsQuestioner_selection(true);
                 answerRepository.save(answer);
             }
             answer.setAnswer_like_num(answer.getAnswer_like_num()+1);
@@ -122,7 +122,7 @@ public class AnswerService {
             //System.out.println(findAnswerLike.size());
             //이 답글에 좋아요 누를 사람이 답글의 질문의 질문자인지 확인.
             if(answer.getQuestion_id().getQuestioner_id().getMember_id() == member_id){
-                answer.setIsQuestioner_like(false);
+                answer.setIsQuestioner_selection(false);
                 answerRepository.save(answer);
             }
             answer.setAnswer_like_num(answer.getAnswer_like_num()-1);

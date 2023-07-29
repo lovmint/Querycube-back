@@ -49,7 +49,7 @@ public class Answer{
 
     private Boolean isActive;
 
-    private Boolean isQuestioner_like;
+    private Boolean isQuestioner_selection;
 
     private boolean deleted = Boolean.FALSE;
 
@@ -63,7 +63,7 @@ public class Answer{
                 .answer_sentence(dto.getAnswer_sentence())
                 .answer_like_num(dto.getAnswer_like_num())
                 .isActive(dto.getIsActive())
-                .isQuestioner_like(dto.getIsQuestioner_like())
+                .isQuestioner_selection(dto.getIsQuestioner_selection())
                 .build();
 
 
