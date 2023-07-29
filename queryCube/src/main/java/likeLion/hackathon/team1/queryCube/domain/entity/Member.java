@@ -27,6 +27,9 @@ public class Member {
     @ManyToOne(fetch = FetchType.LAZY)
     private Region region_id;
 
+    private String username;
+    private String password; // Add this property
+
     private String name;
 
     private Integer reward_point;

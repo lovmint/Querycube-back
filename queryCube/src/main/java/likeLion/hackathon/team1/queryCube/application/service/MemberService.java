@@ -1,3 +1,5 @@
+package likeLion.hackathon.team1.queryCube.application.service;
+
 import likeLion.hackathon.team1.queryCube.application.dto.MemberDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.Member;
 import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
