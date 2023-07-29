@@ -113,6 +113,8 @@ public class AnswerService {
                 answer.setIsQuestioner_like(true);
                 answerRepository.save(answer);
             }
+            answer.setAnswer_like_num(answer.getAnswer_like_num()+1);
+            answerRepository.save(answer);
             answerLikeRepository.save(answerLike);
             //br.plusLike(boardId);
             return true;
@@ -123,6 +125,8 @@ public class AnswerService {
                 answer.setIsQuestioner_like(false);
                 answerRepository.save(answer);
             }
+            answer.setAnswer_like_num(answer.getAnswer_like_num()-1);
+            answerRepository.save(answer);
             answerLikeRepository.deleteById(findAnswerLike.get(0).getAnswer_like_id());
             //answerLikeRepository.deleteByLikerIdAndAnswerId(member, answer);
             //br.minusLike(boardId);

@@ -40,6 +40,8 @@ public class Answer{
     @Column(nullable = false, columnDefinition = "TEXT")
     private String answer_sentence;
 
+    private Integer answer_like_num;
+
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @Column(updatable = false)
@@ -59,6 +61,7 @@ public class Answer{
                 .question_id(room)
                 .answerer_id(user)
                 .answer_sentence(dto.getAnswer_sentence())
+                .answer_like_num(dto.getAnswer_like_num())
                 .isActive(dto.getIsActive())
                 .isQuestioner_like(dto.getIsQuestioner_like())
                 .build();
