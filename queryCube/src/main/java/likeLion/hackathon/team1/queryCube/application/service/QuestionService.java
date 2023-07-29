@@ -4,6 +4,7 @@ import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.Category;
 import likeLion.hackathon.team1.queryCube.domain.entity.Member;
 import likeLion.hackathon.team1.queryCube.domain.entity.Question;
+import likeLion.hackathon.team1.queryCube.domain.entity.QuestionLike; // Add this import
 import likeLion.hackathon.team1.queryCube.domain.repository.CategoryRepository;
 import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
 import likeLion.hackathon.team1.queryCube.domain.repository.QuestionLikeRepository;
