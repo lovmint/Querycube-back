@@ -7,8 +7,12 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class GoogleLoginDto {
+public class MemberDto {
 
-    private String googleId;
+    private String username;
+    private String password;
 
 }
+
+
+
