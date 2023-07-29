@@ -25,8 +25,16 @@ public class MemberController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Member not found with Google ID: " + googleId));
 
         // 구글 로그인 성공 시에 필요한 처리를 추가합니다.
-        // (예: JWT 토큰 발급 등)
 
         return member;
+    }
+
+    // 로그아웃 기능추가를 위한 엔드포인트
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout() {
+        // 로그아웃 처리를 수행합니다.
+
+        // 로그아웃 성공 시에 200 OK 응답을 반환합니다.
+        return ResponseEntity.ok("Logout successful");
     }
 }
