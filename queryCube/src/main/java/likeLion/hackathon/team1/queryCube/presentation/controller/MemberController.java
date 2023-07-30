@@ -8,12 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-
 import javax.servlet.http.HttpSession;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/members")
@@ -44,8 +40,6 @@ public class MemberController {
         }
     }
 
-
-
     // 회원탈퇴 기능 추가를 위한 엔드포인트
     @PostMapping("/delete")
     public ResponseEntity<String> deleteMember(@RequestBody MemberDto memberDto) {
@@ -67,5 +61,4 @@ public class MemberController {
         // 로그아웃 성공 시에 200 OK 응답을 반환합니다.
         return ResponseEntity.ok("Logout successful");
     }
-
 }
