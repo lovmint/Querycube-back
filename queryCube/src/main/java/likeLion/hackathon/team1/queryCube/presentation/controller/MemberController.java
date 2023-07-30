@@ -68,13 +68,4 @@ public class MemberController {
         return ResponseEntity.ok("Logout successful");
     }
 
-    @Configuration
-    public class SecurityConfig {
-
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-            return new BCryptPasswordEncoder(); // You can use any implementation of PasswordEncoder you prefer
-        }
-    }
-
 }

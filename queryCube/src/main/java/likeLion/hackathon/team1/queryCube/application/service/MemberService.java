@@ -96,4 +96,11 @@ public class MemberService {
             return true;
         }
     }
+
+    public class SecurityConfig {
+
+        public PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder(); // You can use any implementation of PasswordEncoder you prefer
+        }
+    }
 }
