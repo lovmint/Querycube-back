@@ -40,7 +40,7 @@ public class ScrapController {
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("delete/{scrap_folder_id}")
+    @DeleteMapping("deleteFolder/{scrap_folder_id}")
     public ResponseEntity<Void> deleteById(@PathVariable Long scrap_folder_id) {
         scrapService.deleteScrapFolder(scrap_folder_id);
         return ResponseEntity.ok(null);
@@ -50,6 +50,13 @@ public class ScrapController {
     public ResponseEntity<Void> changeScrapFolderStatus (@RequestBody AddScrapFolderRequest request, @PathVariable Long scrap_folder_id) {
         Long updatedId = scrapService.changeScrapFolderInfo(ScrapFolderDto.from(request), scrap_folder_id);
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping("/{scrap_folder_id}/{question_id}")
+    public ResponseEntity<Boolean> scrapQuestion(@PathVariable Long scrap_folder_id, @PathVariable Long question_id) {
+        Boolean result = scrapService.scrapQuestion(scrap_folder_id, question_id);
+        System.out.println(result);
+        return ResponseEntity.ok(result);
     }
 }
 
