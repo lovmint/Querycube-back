@@ -1,19 +1,13 @@
 package likeLion.hackathon.team1.queryCube.application.service;
 
-import likeLion.hackathon.team1.queryCube.application.dto.AnswerDto;
 import likeLion.hackathon.team1.queryCube.application.dto.ScrapFolderDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.*;
 import likeLion.hackathon.team1.queryCube.domain.repository.*;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -26,6 +20,8 @@ public class ScrapService {
     private final AnswerRepository answerRepository;
     private final AnswerLikeRepository answerLikeRepository;
     private final ScrapFolderRepository scrapFolderRepository;
+    private final ScrapQuestionRepository scrapQuestionRepository;
+
 
     @Transactional
     public Long addScrapFolder(ScrapFolderDto dto, Long member_id){
@@ -67,5 +63,29 @@ public class ScrapService {
 
         ScrapFolder updatedScrapFolder = scrapFolderRepository.save(scrapFolder);
         return updatedScrapFolder.getScrap_folder_id();
+    }
+
+    public Boolean scrapQuestion(Long scrap_folder_id, Long question_id) {
+        ScrapFolder scrapFolder = scrapFolderRepository.findById(scrap_folder_id).orElseThrow(() -> new IllegalArgumentException("no such scrapFolder"));
+        Question question = questionRepository.findById(question_id).orElseThrow(() -> new IllegalArgumentException("no such question"));
+
+        List<ScrapQuestion> findScrapQuestion = scrapQuestionRepository.findByScrapFolderIdAndQuestionId(scrapFolder, question);
+
+        //System.out.println(findAnswerLike.isEmpty());
+        if (findScrapQuestion.isEmpty()){
+
+            ScrapQuestion scrapQuestion = ScrapQuestion.toScrapQuestion(scrapFolder, question);
+            scrapQuestionRepository.save(scrapQuestion);
+
+            return true;
+        }else {
+
+            scrapQuestionRepository.deleteById(findScrapQuestion.get(0).getScrap_question_id());
+            //answerLikeRepository.deleteByLikerIdAndAnswerId(member, answer);
+            //br.minusLike(boardId);
+            return false;
+
+        }
+
     }
 }
