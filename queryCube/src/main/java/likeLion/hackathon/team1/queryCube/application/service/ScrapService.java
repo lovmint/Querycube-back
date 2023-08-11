@@ -1,6 +1,7 @@
 package likeLion.hackathon.team1.queryCube.application.service;
 
 import likeLion.hackathon.team1.queryCube.application.dto.ScrapFolderDto;
+import likeLion.hackathon.team1.queryCube.application.dto.ScrapQuestionDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.*;
 import likeLion.hackathon.team1.queryCube.domain.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -82,7 +83,7 @@ public class ScrapService {
             return true;
         }else {
             scrapFolder.setScrap_question_num(scrapFolder.getScrap_question_num()-1);
-            scrapQuestionRepository.deleteById(findScrapQuestion.get(0).getScrap_question_id());
+            scrapQuestionRepository.deleteById(findScrapQuestion.get(0).getScrap_id());
             scrapFolderRepository.save(scrapFolder);
             //answerLikeRepository.deleteByLikerIdAndAnswerId(member, answer);
             //br.minusLike(boardId);
@@ -90,5 +91,13 @@ public class ScrapService {
 
         }
 
+    }
+
+    public Long scrapMemo(ScrapQuestionDto dto, Long scrap_id){
+        ScrapQuestion scrapQuestion = scrapQuestionRepository.findById(scrap_id).orElseThrow(() -> new IllegalArgumentException("no such scrap"));
+        scrapQuestion.setScrap_memo(dto.getScrap_memo());
+
+        ScrapQuestion updatedScrapQuestion = scrapQuestionRepository.save(scrapQuestion);
+        return updatedScrapQuestion.getScrap_id();
     }
 }
