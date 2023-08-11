@@ -30,6 +30,8 @@ public class ScrapQuestion {
     @ManyToOne(fetch = FetchType.LAZY)
     private Question questionId;
 
+    private String scrap_memo;
+
     private boolean deleted = Boolean.FALSE;
 
     public static ScrapQuestion toScrapQuestion(ScrapFolder scrapFolderId, Question questionId) {

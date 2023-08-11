@@ -26,11 +26,14 @@ public class ScrapFolderDto {
 
     private String scrap_folder_name;
 
+    private Integer scrap_question_num;
+
     private boolean deleted = Boolean.FALSE;
 
     public static ScrapFolderDto toAddScrapFolder(AddScrapFolderRequest request) {
         return ScrapFolderDto.builder()
                 .scrap_folder_name(request.getScrap_folder_name())
+                .scrap_question_num(0)
                 .build();
     }
 
@@ -46,6 +49,7 @@ public class ScrapFolderDto {
                 .scrap_folder_id(scrapFolder.getScrap_folder_id())
                 .memberId(scrapFolder.getMemberId())
                 .scrap_folder_name(scrapFolder.getScrap_folder_name())
+                .scrap_question_num(scrapFolder.getScrap_question_num())
                 .build();
     }
 }

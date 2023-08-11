@@ -74,13 +74,16 @@ public class ScrapService {
         //System.out.println(findAnswerLike.isEmpty());
         if (findScrapQuestion.isEmpty()){
 
+            scrapFolder.setScrap_question_num(scrapFolder.getScrap_question_num()+1);
             ScrapQuestion scrapQuestion = ScrapQuestion.toScrapQuestion(scrapFolder, question);
+            scrapFolderRepository.save(scrapFolder);
             scrapQuestionRepository.save(scrapQuestion);
 
             return true;
         }else {
-
+            scrapFolder.setScrap_question_num(scrapFolder.getScrap_question_num()-1);
             scrapQuestionRepository.deleteById(findScrapQuestion.get(0).getScrap_question_id());
+            scrapFolderRepository.save(scrapFolder);
             //answerLikeRepository.deleteByLikerIdAndAnswerId(member, answer);
             //br.minusLike(boardId);
             return false;
