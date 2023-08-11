@@ -77,7 +77,7 @@ public class Member {
 
     public List<QuestionDto> getMyQuestions() {
         return this.questions.stream()
-                .map(question -> new QuestionDto(question.getQuestion_id(), question.getQuestion_title(), question.getQuestion_content()))
+                .map(question -> new QuestionDto(question.getQuestion_id(), question.getQuestion_title(), question.getQuestion_content(), question.getQuestioner_id().getMember_id(), question.getCreate_date(), question.getQuestionLikes().size()))
                 .collect(Collectors.toList());
     }
 
