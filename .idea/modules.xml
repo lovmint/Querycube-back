@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/2023-LikeLion-Hackathon-team1-back.iml" filepath="$PROJECT_DIR$/.idea/2023-LikeLion-Hackathon-team1-back.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/queryCube.main.iml" filepath="$PROJECT_DIR$/.idea/modules/queryCube.main.iml" />
     </modules>
   </component>
 </project>
