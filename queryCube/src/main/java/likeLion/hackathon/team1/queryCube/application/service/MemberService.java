@@ -1,14 +1,14 @@
 package likeLion.hackathon.team1.queryCube.application.service;
 
-        import likeLion.hackathon.team1.queryCube.application.dto.MemberInfoDto;
-        import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
-        import likeLion.hackathon.team1.queryCube.domain.entity.Member;
-        import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.stereotype.Service;
+import likeLion.hackathon.team1.queryCube.application.dto.MemberInfoDto;
+import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
+import likeLion.hackathon.team1.queryCube.domain.entity.Member;
+import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-        import java.util.List;
-        import java.util.stream.Collectors;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
@@ -41,11 +41,14 @@ public class MemberService {
         return null;
     }
 
-    public void googleLogin(Long memberId, String googleAccountId, String displayName) {
+    public void googleLogin(Long memberId, String googleAccountId, String displayName, String code) {
         Member member = memberRepository.findById(memberId).orElse(null);
         if (member != null) {
             member.googleLogin(googleAccountId, displayName);
             memberRepository.save(member);
+
+            // Your Google Login Integration Code Here
+            // Use the provided 'code' parameter to proceed with Google authentication
         }
     }
 
