@@ -1,14 +1,11 @@
 package likeLion.hackathon.team1.queryCube.presentation.controller;
 
-
 import likeLion.hackathon.team1.queryCube.application.dto.MemberInfoDto;
 import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
 import likeLion.hackathon.team1.queryCube.application.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import lombok.Builder;
-import lombok.Data;
 
 import java.util.List;
 
@@ -35,7 +32,7 @@ public class MemberController {
 
     @PostMapping("/{memberId}/google-login")
     public ResponseEntity<String> googleLogin(@PathVariable Long memberId, @RequestBody GoogleLoginRequest request) {
-        memberService.googleLogin(memberId, request.getGoogleAccountId(), request.getDisplayName(), request.getCode());
+        memberService.googleLogin(memberId, request.getGoogleAccountId(), request.getDisplayName());
         return ResponseEntity.ok("구글 계정 연동 완료");
     }
 
@@ -46,12 +43,25 @@ public class MemberController {
     }
 
     // 다른 엔드포인트와 기능을 추가할 수 있습니다.
+}
 
-    @Data
-    @Builder
-    public static class GoogleLoginRequest {
-        private String googleAccountId;
-        private String displayName;
-        private String code;
+class GoogleLoginRequest {
+    private String googleAccountId;
+    private String displayName;
+
+    public String getGoogleAccountId() {
+        return googleAccountId;
+    }
+
+    public void setGoogleAccountId(String googleAccountId) {
+        this.googleAccountId = googleAccountId;
+    }
+
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
     }
 }
