@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/likelion
+    username: root
+    password: 12345678
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    charset: utf8mb4
 
   jpa:
     hibernate:
@@ -13,12 +14,10 @@ spring:
         format_sql: true
         jdbc:
           time_zone: Asia/Seoul
-        dialect: org.hibernate.dialect.H2Dialect
     show_sql: true
-
 logging:
   level:
-    org.hibernate.SQL: debug
+    org.hibernate.sql: debug
 
 google:
   auth:
