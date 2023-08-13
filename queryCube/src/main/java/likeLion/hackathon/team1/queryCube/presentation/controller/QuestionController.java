@@ -16,7 +16,6 @@ public class QuestionController {
 
     @Autowired
     public QuestionController(QuestionService questionService) {
-
         this.questionService = questionService;
     }
 
@@ -26,5 +25,11 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
+    // Get questions sorted by likes in descending order
+    @GetMapping("/sorted-by-likes")
+    public List<QuestionDto> getQuestionsSortedByLikes() {
+        return questionService.getQuestionsByLikesDescendingWithSameInfo();
+    }
 
-}
+    }
+

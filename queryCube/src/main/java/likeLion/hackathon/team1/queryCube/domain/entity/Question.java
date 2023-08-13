@@ -8,6 +8,18 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.FileEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
+
+import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +34,7 @@ import java.util.List;
 @Where(clause = "deleted = false")
 @SQLDelete(sql = "UPDATE question SET deleted = true WHERE question_id = ?")
 public class Question {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,19 +70,39 @@ public class Question {
 
     private boolean deleted = Boolean.FALSE;
 
-    // 이미지 업로드 기능 추가
-    public void uploadImageToNaverCloud(String imageUrl) {
-        // 네이버 클라우드 API 호출하여 이미지 업로드 구현
-        // 구현 방법은 클라우드 API 사용 라이브러리 등에 따라 달라질 수 있습니다.
-        // 이 예시에서는 이미지 URL을 imageUrls 리스트에 추가하는 것으로 가정합니다.
-        if (imageUrls.size() < 5) {
-            imageUrls.add(imageUrl);
-        } else {
-            // 이미지 첨부 파일이 5장을 초과하면 에러 처리 또는 알림 로직 추가
-            // 이 예시에서는 간단히 로그를 출력합니다.
-            System.out.println("이미지 첨부 파일은 최대 5장까지 가능합니다.");
+    // 이미지 업로드 기능 추가 (네이버 클라우드)
+    public void uploadImageToNaverCloud(String imagePath) {
+        // 네이버 클라우드 API 업로드 URL
+        String uploadUrl = "https://ncloud.apigw.ntruss.com/cv/v1/ncp-imageocr/v1/upload";
+
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            HttpPost httpPost = new HttpPost(uploadUrl);
+            httpPost.addHeader("X-OCR-SECRET", "YOUR_NAVER_CLOUD_API_KEY");
+
+            File imageFile = new File(imagePath);
+            FileEntity fileEntity = new FileEntity(imageFile, ContentType.DEFAULT_BINARY);
+
+            httpPost.setEntity(fileEntity);
+
+            try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
+                HttpEntity responseEntity = response.getEntity();
+                // 처리할 응답 내용을 여기서 처리 (예: 이미지 URL 파싱)
+                if (response.getStatusLine().getStatusCode() == 200 && responseEntity != null) {
+                    String uploadedImageUrl = EntityUtils.toString(responseEntity);
+                    if (imageUrls.size() < 5) {
+                        imageUrls.add(uploadedImageUrl);
+                    } else {
+                        System.out.println("이미지 첨부 파일은 최대 5장까지 가능합니다.");
+                    }
+                } else {
+                    System.out.println("이미지 업로드 실패: " + response.getStatusLine().getStatusCode());
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
+
 
     // 질문 등록 기능 추가
     public void registerQuestion(Member questioner, Category category, String title, String content) {

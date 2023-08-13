@@ -37,7 +37,8 @@ public class QuestionService {
                 question.getQuestion_content(),
                 question.getQuestioner_id().getMember_id(),
                 question.getCreate_date(),
-                question.getQuestionLikes().size()
+                question.getQuestionLikes().size(),
+                question.getImageUrls()
 
         );
     }
@@ -60,7 +61,8 @@ public class QuestionService {
                 question.getQuestion_content(),
                 question.getQuestioner_id().getMember_id(),
                 question.getCreate_date(),
-                question.getQuestionLikes().size()
+                question.getQuestionLikes().size(),
+                question.getImageUrls()
         );
     }
 }
