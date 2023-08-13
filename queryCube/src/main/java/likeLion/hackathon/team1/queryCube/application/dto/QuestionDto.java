@@ -20,5 +20,9 @@ public class QuestionDto {
     private LocalDateTime create_date;
     private int questionLikeCount;
     private List<String> imageUrls;
+    private String userImage; // Field for user image URL
+
     // Add other fields as needed
+
+
 }
