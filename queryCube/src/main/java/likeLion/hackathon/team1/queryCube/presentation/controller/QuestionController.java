@@ -25,5 +25,9 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
-
+    // Get questions sorted by likes in descending order with user images
+    @GetMapping("/sorted-by-likes")
+    public List<QuestionDto> getQuestionsSortedByLikes() {
+        return questionService.getQuestionsByLikesDescendingWithUserImages();
+    }
 }
