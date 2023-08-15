@@ -15,7 +15,19 @@ spring:
         jdbc:
           time_zone: Asia/Seoul
     show_sql: true
-
 logging:
   level:
     org.hibernate.sql: debug
+
+chatgpt:
+  api-key:
+google:
+  auth:
+    url: https://oauth2.googleapis.com
+  login:
+    url: https://accounts.google.com
+  redirect:
+    url: http://localhost:8080/login/oauth_google_check
+  client:
+    id: 126024763241-1h3mpcqf721l4h3hnv7nuskhh4qfut1g.apps.googleusercontent.com
+  secret: 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

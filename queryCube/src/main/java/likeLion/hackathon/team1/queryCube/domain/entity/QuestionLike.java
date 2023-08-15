@@ -1,35 +1,35 @@
 package likeLion.hackathon.team1.queryCube.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
-import lombok.*;
+        import jakarta.persistence.*;
+        import lombok.Getter;
+        import lombok.NoArgsConstructor;
+        import lombok.Setter;
+
+        import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class QuestionLike {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long question_like_id;
+    private Long id;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private Member likerId;
+    private Member liker;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    private Question questionId;
+    private Question question;
 
-    private boolean deleted = Boolean.FALSE;
+    private LocalDateTime likeDate;
 
-    public static QuestionLike toQuestionLike(Member likerId, Question questionId) {
-        return QuestionLike.builder()
-                .likerId(likerId)
-                .questionId(questionId)
-                .build();
+    public static QuestionLike toQuestionLike(Member liker, Question question) {
+        QuestionLike questionLike = new QuestionLike();
+        questionLike.setLiker(liker);
+        questionLike.setQuestion(question);
+        questionLike.setLikeDate(LocalDateTime.now());
+        return questionLike;
     }
 }
