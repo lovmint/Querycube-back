@@ -20,7 +20,7 @@ public class ScrapQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long scrap_id;
+    private Long scrap_question_id;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -29,8 +29,6 @@ public class ScrapQuestion {
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     private Question questionId;
-
-    private String scrap_memo;
 
     private boolean deleted = Boolean.FALSE;
 

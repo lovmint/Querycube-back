@@ -29,8 +29,6 @@ public class ScrapFolder {
 
     private String scrap_folder_name;
 
-    private Integer scrap_question_num;
-
     private boolean deleted = Boolean.FALSE;
 
     public static ScrapFolder toScrapFolder(ScrapFolderDto dto, Member user) {
@@ -38,7 +36,6 @@ public class ScrapFolder {
         return ScrapFolder.builder()
                 .memberId(user)
                 .scrap_folder_name(dto.getScrap_folder_name())
-                .scrap_question_num(dto.getScrap_question_num())
                 .build();
 
 

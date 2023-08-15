@@ -18,10 +18,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long category_id;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Big3Category big3_category_id;
-
     @Column(nullable = false)
     private String name;
 }

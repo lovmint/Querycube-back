@@ -1,16 +1,21 @@
 package likeLion.hackathon.team1.queryCube.application.service;
 
 import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
+import likeLion.hackathon.team1.queryCube.domain.entity.Category;
 import likeLion.hackathon.team1.queryCube.domain.entity.Member;
 import likeLion.hackathon.team1.queryCube.domain.entity.Question;
-import likeLion.hackathon.team1.queryCube.domain.repository.QuestionRepository;
+import likeLion.hackathon.team1.queryCube.domain.entity.QuestionLike; // Add this import
+import likeLion.hackathon.team1.queryCube.domain.repository.CategoryRepository;
 import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import likeLion.hackathon.team1.queryCube.domain.repository.QuestionLikeRepository;
+import likeLion.hackathon.team1.queryCube.domain.repository.QuestionRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Comparator;
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -18,71 +23,78 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
     private final MemberRepository memberRepository;
+    private final CategoryRepository categoryRepository;
+    private final QuestionLikeRepository questionLikeRepository;
 
-    @Autowired
-    public QuestionService(QuestionRepository questionRepository, MemberRepository memberRepository) {
+    public QuestionService(QuestionRepository questionRepository, MemberRepository memberRepository, CategoryRepository categoryRepository, QuestionLikeRepository questionLikeRepository) {
         this.questionRepository = questionRepository;
         this.memberRepository = memberRepository;
+        this.categoryRepository = categoryRepository;
+        this.questionLikeRepository = questionLikeRepository;
     }
 
-    // Retrieve the full list of questions
+    @Transactional
+    public Long addQuestion(QuestionDto dto, Long questioner_member_id, Long category_id) {
+        Member questioner = memberRepository.findById(questioner_member_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such questioner member"));
+        Category category = categoryRepository.findById(category_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such category"));
+
+        Question newQuestion = Question.toQuestion(dto.getQuestion_sentence(), questioner, category);
+        questionRepository.save(newQuestion);
+        return newQuestion.getQuestion_id();
+    }
+
+    @Transactional
     public List<QuestionDto> getAllQuestions() {
         List<Question> questions = questionRepository.findAll();
         return questions.stream()
-                .map(this::convertToDto)
+                .map(QuestionDto::from)
                 .collect(Collectors.toList());
     }
 
-    // Convert Question entity to QuestionDto
-    private QuestionDto convertToDto(Question question) {
-        int questionLikeCount = question.getQuestionLikes().size();
-        return new QuestionDto(
-                question.getQuestion_id(),
-                question.getQuestion_title(),
-                question.getQuestion_content(),
-                question.getQuestioner_id().getMember_id(),
-                question.getCreate_date(),
-                questionLikeCount,
-                question.getImageUrls(),
-                null // Set userImage as null initially
-        );
+    @Transactional
+    public void deleteQuestion(Long question_id) {
+        questionRepository.deleteById(question_id);
     }
 
-    // Get questions sorted by the number of likes in descending order
-    public List<QuestionDto> getQuestionsByLikesDescendingWithUserImages() {
-        List<Question> questions = questionRepository.findAll();
-        Map<Long, String> userImages = getUserImagesMap(questions);
+    @Transactional
+    public Long changeQuestionInfo(QuestionDto dto, Long question_id) {
+        Question question = questionRepository.findById(question_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such question"));
+        question.setQuestion_sentence(dto.getQuestion_sentence());
+        question.setIsNotification_status(dto.getIsNotification_status());
 
-        return questions.stream()
-                .sorted(Comparator.comparingInt(question -> -question.getQuestionLikes().size()))
-                .map(question -> convertToDtoWithUserImage(question, userImages))
-                .collect(Collectors.toList());
+        Question updatedQuestion = questionRepository.save(question);
+        return updatedQuestion.getQuestion_id();
     }
 
-    // Convert Question entity to QuestionDto with user image
-    private QuestionDto convertToDtoWithUserImage(Question question, Map<Long, String> userImages) {
-        int questionLikeCount = question.getQuestionLikes().size();
-        return new QuestionDto(
-                question.getQuestion_id(),
-                question.getQuestion_title(),
-                question.getQuestion_content(),
-                question.getQuestioner_id().getMember_id(),
-                question.getCreate_date(),
-                questionLikeCount,
-                question.getImageUrls(),
-                userImages.getOrDefault(question.getQuestioner_id().getMember_id(), null)
-        );
+    public Boolean saveLike(Long question_id, Long member_id) {
+        Question question = questionRepository.findById(question_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such question"));
+        Member member = memberRepository.findById(member_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such member"));
+
+        List<QuestionLike> findQuestionLike = questionLikeRepository.findByLikerIdAndQuestionId(member, question);
+
+        if (findQuestionLike.isEmpty()) {
+            QuestionLike questionLike = QuestionLike.toQuestionLike(member, question);
+            questionLikeRepository.save(questionLike);
+            return true;
+        } else {
+            questionLikeRepository.deleteById(findQuestionLike.get(0).getQuestion_like_id());
+            return false;
+        }
     }
 
-    // Retrieve user images and create a map of member IDs and their images
-    private Map<Long, String> getUserImagesMap(List<Question> questions) {
-        List<Long> userIds = questions.stream()
-                .map(question -> question.getQuestioner_id().getMember_id())
-                .distinct()
-                .collect(Collectors.toList());
+    public boolean findQuestionLike(Long question_id, Long member_id) {
+        Question question = questionRepository.findById(question_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such question"));
+        Member member = memberRepository.findById(member_id)
+                .orElseThrow(() -> new IllegalArgumentException("No such member"));
 
-        List<Member> users = memberRepository.findAllById(userIds);
-        return users.stream()
-                .collect(Collectors.toMap(Member::getMember_id, Member::getImageUrl));
+        List<QuestionLike> findQuestionLike = questionLikeRepository.findByLikerIdAndQuestionId(member, question);
+
+        return !findQuestionLike.isEmpty();
     }
 }
