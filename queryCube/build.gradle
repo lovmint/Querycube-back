@@ -35,11 +35,11 @@ dependencies {
 	}
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	implementation 'javax.persistence:javax.persistence-api:2.2'
-	implementation 'javax.servlet:javax.servlet-api:4.0.1' // Add this line for servlet API
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.session:spring-session-core'
-	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
+	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
+
 }
 
 tasks.named('test') {

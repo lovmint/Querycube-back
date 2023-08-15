@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -12,16 +15,19 @@ import org.hibernate.annotations.SQLDelete;
 @NoArgsConstructor
 @AllArgsConstructor
 //@Where(clause = "deleted = false")
-@SQLDelete(sql = "UPDATE category SET deleted = true WHERE category_id = ?")
-public class Category {
+@SQLDelete(sql = "UPDATE big3_category SET deleted = true WHERE Big3_category_id = ?")
+public class Big3Category {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long category_id;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Big3Category big3_category_id;
+    private Long big3_category_id;
 
     @Column(nullable = false)
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "big3_category_id", cascade = CascadeType.ALL)
+    private List<Category> categoryList = new ArrayList<>();
+
+
 }

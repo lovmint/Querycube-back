@@ -2,10 +2,12 @@ package likeLion.hackathon.team1.queryCube.presentation.controller;
 
 import likeLion.hackathon.team1.queryCube.application.dto.AnswerDto;
 import likeLion.hackathon.team1.queryCube.application.dto.ScrapFolderDto;
+import likeLion.hackathon.team1.queryCube.application.dto.ScrapQuestionDto;
 import likeLion.hackathon.team1.queryCube.application.service.AnswerService;
 import likeLion.hackathon.team1.queryCube.application.service.ScrapService;
 import likeLion.hackathon.team1.queryCube.presentation.request.AddAnswerRequest;
 import likeLion.hackathon.team1.queryCube.presentation.request.AddScrapFolderRequest;
+import likeLion.hackathon.team1.queryCube.presentation.request.AddScrapMemoRequest;
 import likeLion.hackathon.team1.queryCube.presentation.response.AnswerInfoResponse;
 import likeLion.hackathon.team1.queryCube.presentation.response.ScrapFolderInfoResponse;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +59,12 @@ public class ScrapController {
         Boolean result = scrapService.scrapQuestion(scrap_folder_id, question_id);
         System.out.println(result);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("scrap_memo/{scrap_id}")
+    public ResponseEntity<Void> scrapMemo(@RequestBody AddScrapMemoRequest request, @PathVariable Long scrap_id) {
+        Long updatedId = scrapService.scrapMemo(ScrapQuestionDto.from(request), scrap_id);
+        return ResponseEntity.ok(null);
     }
 }
 

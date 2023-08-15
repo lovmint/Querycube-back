@@ -1,64 +1,57 @@
 package likeLion.hackathon.team1.queryCube.presentation.controller;
 
-import likeLion.hackathon.team1.queryCube.application.dto.MemberDto;
-import likeLion.hackathon.team1.queryCube.application.service.MemberService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
-import javax.servlet.http.HttpSession;
+import likeLion.hackathon.team1.queryCube.application.dto.MemberInfoDto;
+import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
+import likeLion.hackathon.team1.queryCube.application.service.MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import lombok.Builder;
+import lombok.Data;
+
+import java.util.List;
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping("/api/members")
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
 
-    // 회원가입 기능 추가를 위한 엔드포인트
-    @PostMapping("/signup")
-    public ResponseEntity<Long> signUp(@RequestBody MemberDto memberDto) {
-        Long memberId = memberService.addMember(memberDto);
-        return ResponseEntity.ok(memberId);
+    @Autowired
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
-    // 로그인 기능을 위한 엔드포인트
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody MemberDto loginDto) {
-        String username = loginDto.getUsername();
-        String password = loginDto.getPassword();
-
-        boolean isValidLogin = memberService.isValidLogin(username, password);
-
-        if (isValidLogin) {
-            // 로그인 성공 시에 필요한 처리를 추가합니다.
-            return ResponseEntity.ok("Login successful");
-        } else {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Invalid username or password");
-        }
+    @GetMapping("/{memberId}/info")
+    public MemberInfoDto getMemberInfo(@PathVariable Long memberId) {
+        return memberService.getMemberInfo(memberId);
     }
 
-    // 회원탈퇴 기능 추가를 위한 엔드포인트
-    @PostMapping("/delete")
-    public ResponseEntity<String> deleteMember(@RequestBody MemberDto memberDto) {
-        String username = memberDto.getUsername();
-
-        // 회원탈퇴 서비스를 호출하여 해당 유저를 삭제합니다.
-        memberService.deleteMember(username);
-
-        // 회원탈퇴 성공 시에 200 OK 응답을 반환합니다.
-        return ResponseEntity.ok("Member deleted successfully");
+    @GetMapping("/{memberId}/questions")
+    public List<QuestionDto> getMemberQuestions(@PathVariable Long memberId) {
+        return memberService.getMemberQuestions(memberId);
     }
 
-    // 로그아웃 기능 추가를 위한 엔드포인트
-    @PostMapping("/logout")
-    public ResponseEntity<String> logout(HttpSession session) {
-        // 로그아웃 처리를 수행합니다.
-        memberService.logout(session);
+    @PostMapping("/{memberId}/google-login")
+    public ResponseEntity<String> googleLogin(@PathVariable Long memberId, @RequestBody GoogleLoginRequest request) {
+        memberService.googleLogin(memberId, request.getGoogleAccountId(), request.getDisplayName(), request.getCode());
+        return ResponseEntity.ok("구글 계정 연동 완료");
+    }
 
-        // 로그아웃 성공 시에 200 OK 응답을 반환합니다.
-        return ResponseEntity.ok("Logout successful");
+    @PostMapping("/{memberId}/logout")
+    public ResponseEntity<String> logout(@PathVariable Long memberId) {
+        memberService.logout(memberId);
+        return ResponseEntity.ok("로그아웃 완료");
+    }
+
+    // 다른 엔드포인트와 기능을 추가할 수 있습니다.
+
+    @Data
+    @Builder
+    public static class GoogleLoginRequest {
+        private String googleAccountId;
+        private String displayName;
+        private String code;
     }
 }

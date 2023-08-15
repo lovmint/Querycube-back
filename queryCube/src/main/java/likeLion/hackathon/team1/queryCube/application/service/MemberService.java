@@ -1,100 +1,63 @@
 package likeLion.hackathon.team1.queryCube.application.service;
 
-import likeLion.hackathon.team1.queryCube.application.dto.MemberDto;
+import likeLion.hackathon.team1.queryCube.application.dto.MemberInfoDto;
+import likeLion.hackathon.team1.queryCube.application.dto.QuestionDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.Member;
 import likeLion.hackathon.team1.queryCube.domain.repository.MemberRepository;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpSession;
-
-import java.util.Optional;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MemberService {
 
     private final MemberRepository memberRepository;
-    private final PasswordEncoder passwordEncoder;
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder) {
+    @Autowired
+    public MemberService(MemberRepository memberRepository) {
         this.memberRepository = memberRepository;
-        this.passwordEncoder = passwordEncoder;
     }
 
-    @Transactional
-    public Long addMember(MemberDto dto) {
-        // Check if the username is already taken
-        if (memberRepository.findByUsername(dto.getUsername()).isPresent()) {
-            throw new IllegalArgumentException("Username already exists");
+    public MemberInfoDto getMemberInfo(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            return new MemberInfoDto(
+                    member.getMember_id(),
+                    member.getName(),
+                    member.getReward_point(),
+                    member.getCreate_date()
+            );
         }
-
-        // Hash the password before storing it in the database
-        String hashedPassword = passwordEncoder.encode(dto.getPassword());
-
-        Member newMember = Member.builder()
-                .username(dto.getUsername())
-                .password(hashedPassword)
-                .build();
-        memberRepository.save(newMember);
-        return newMember.getMember_id();
+        return null;
     }
 
-    public Optional<Member> findMemberByUsername(String username) {
-        return memberRepository.findByUsername(username);
-    }
-
-    // Remove the findMemberByGoogleId method as it is not needed for self-registration, login, and logout
-
-    // Add a new method to check if a given username and password combination is valid for login
-    public boolean isValidLogin(String username, String password) {
-        Optional<Member> memberOptional = memberRepository.findByUsername(username);
-        if (memberOptional.isPresent()) {
-            String hashedPassword = memberOptional.get().getPassword();
-            return passwordEncoder.matches(password, hashedPassword);
+    public List<QuestionDto> getMemberQuestions(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            return member.getMyQuestions();
         }
-        return false;
+        return null;
     }
 
-    @Transactional
-    public void deleteMember(String username) {
-        // Find the member by username
-        Member member = memberRepository.findByUsername(username)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found with username: " + username));
+    public void googleLogin(Long memberId, String googleAccountId, String displayName, String code) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            member.googleLogin(googleAccountId, displayName);
+            memberRepository.save(member);
 
-        // Soft delete the member by marking it as deleted
-        member.setDeleted(true);
-        memberRepository.save(member);
-    }
-
-    //로그아웃 기능 추가
-    public void logout(HttpSession session) {
-        session.invalidate();
-    }
-
-    //구글 계정 연동 로그인 기능 추가
-    @Transactional
-    public boolean processGoogleLogin(String googleId) {
-        // Check if a user with the given Google ID exists in the database
-        Optional<Member> memberOptional = memberRepository.findByGoogleId(googleId);
-
-        if (memberOptional.isPresent()) {
-            // If the user exists, link the Google account to the existing user (Optional step)
-            Member existingMember = memberOptional.get();
-            // Perform any necessary updates or validations here
-            // For example, update the last login timestamp or perform user verification
-
-            return true;
-        } else {
-            // If the user does not exist, create a new user based on the Google account information
-            Member newMember = Member.builder()
-                    .googleId(googleId)
-                    // Add other required fields here
-                    .build();
-            memberRepository.save(newMember);
-
-            return true;
+            // Your Google Login Integration Code Here
+            // Use the provided 'code' parameter to proceed with Google authentication
         }
     }
 
+    public void logout(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElse(null);
+        if (member != null) {
+            member.logout();
+            memberRepository.save(member);
+        }
+    }
+    // 다른 기능들을 추가할 수 있습니다.
 }

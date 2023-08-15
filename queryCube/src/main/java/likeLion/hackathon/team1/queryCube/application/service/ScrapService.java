@@ -1,6 +1,7 @@
 package likeLion.hackathon.team1.queryCube.application.service;
 
 import likeLion.hackathon.team1.queryCube.application.dto.ScrapFolderDto;
+import likeLion.hackathon.team1.queryCube.application.dto.ScrapQuestionDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.*;
 import likeLion.hackathon.team1.queryCube.domain.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -74,18 +75,29 @@ public class ScrapService {
         //System.out.println(findAnswerLike.isEmpty());
         if (findScrapQuestion.isEmpty()){
 
+            scrapFolder.setScrap_question_num(scrapFolder.getScrap_question_num()+1);
             ScrapQuestion scrapQuestion = ScrapQuestion.toScrapQuestion(scrapFolder, question);
+            scrapFolderRepository.save(scrapFolder);
             scrapQuestionRepository.save(scrapQuestion);
 
             return true;
         }else {
-
-            scrapQuestionRepository.deleteById(findScrapQuestion.get(0).getScrap_question_id());
+            scrapFolder.setScrap_question_num(scrapFolder.getScrap_question_num()-1);
+            scrapQuestionRepository.deleteById(findScrapQuestion.get(0).getScrap_id());
+            scrapFolderRepository.save(scrapFolder);
             //answerLikeRepository.deleteByLikerIdAndAnswerId(member, answer);
             //br.minusLike(boardId);
             return false;
 
         }
 
+    }
+
+    public Long scrapMemo(ScrapQuestionDto dto, Long scrap_id){
+        ScrapQuestion scrapQuestion = scrapQuestionRepository.findById(scrap_id).orElseThrow(() -> new IllegalArgumentException("no such scrap"));
+        scrapQuestion.setScrap_memo(dto.getScrap_memo());
+
+        ScrapQuestion updatedScrapQuestion = scrapQuestionRepository.save(scrapQuestion);
+        return updatedScrapQuestion.getScrap_id();
     }
 }
