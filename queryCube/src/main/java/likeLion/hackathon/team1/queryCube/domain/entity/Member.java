@@ -39,12 +39,19 @@ public class Member {
 
     private Integer reward_point;
 
+    private String imageUrl; // Add the imageUrl field
+
     @CreatedDate
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     @Column(updatable = false)
     private LocalDateTime create_date;
 
     private boolean deleted = Boolean.FALSE;
+
+    // Add the getImageUrl method
+    public String getImageUrl() {
+        return imageUrl;
+    }
 
     // 구글 계정 연동 간편 로그인 기능
     private String googleAccountId;
@@ -77,7 +84,7 @@ public class Member {
 
     public List<QuestionDto> getMyQuestions() {
         return this.questions.stream()
-                .map(question -> new QuestionDto(question.getQuestion_id(), question.getQuestion_title(), question.getQuestion_content()))
+                .map(question -> new QuestionDto(question.getQuestion_id(), question.getQuestion_title(), question.getQuestion_content(), question.getQuestioner_id().getMember_id(), question.getCreate_date(), question.getQuestionLikes().size(),question.getImageUrls(),question.getQuestioner_id().getImageUrl()))
                 .collect(Collectors.toList());
     }
 
