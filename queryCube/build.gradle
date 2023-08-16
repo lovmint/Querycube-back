@@ -35,7 +35,11 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	// https://mvnrepository.com/artifact/javax.persistence/javax.persistence-api
 	implementation 'javax.persistence:javax.persistence-api:2.2'
+
+	implementation 'io.github.flashvayne:chatgpt-spring-boot-starter:1.0.4'
+
 	implementation 'org.apache.httpcomponents:httpclient:4.5.13'
+
 
 }
 

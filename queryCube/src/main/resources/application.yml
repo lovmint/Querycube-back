@@ -19,6 +19,8 @@ logging:
   level:
     org.hibernate.sql: debug
 
+chatgpt:
+  api-key:
 google:
   auth:
     url: https://oauth2.googleapis.com

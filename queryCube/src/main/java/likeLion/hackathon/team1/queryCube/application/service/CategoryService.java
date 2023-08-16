@@ -2,6 +2,7 @@ package likeLion.hackathon.team1.queryCube.application.service;
 
 
 import likeLion.hackathon.team1.queryCube.application.dto.AnswerDto;
+import likeLion.hackathon.team1.queryCube.application.dto.Big3CategoryDto;
 import likeLion.hackathon.team1.queryCube.application.dto.CategoryDto;
 import likeLion.hackathon.team1.queryCube.domain.entity.*;
 import likeLion.hackathon.team1.queryCube.domain.repository.*;
@@ -22,12 +23,13 @@ public class CategoryService {
     private final AnswerRepository answerRepository;
     private final AnswerLikeRepository answerLikeRepository;
     private final CategoryInterestRepository categoryInterestRepository;
+    private final Big3CategoryRepository big3CategoryInterestRepository;
 
     @Transactional
-    public List<CategoryDto> getCategoryList(){
-        List<Category> categoryList = categoryRepository.findAll();
+    public List<Big3CategoryDto> getCategoryList(){
+        List<Big3Category> categoryList = big3CategoryInterestRepository.findAll();
 
-        return categoryList.stream().map(CategoryDto::from).collect(Collectors.toList());
+        return categoryList.stream().map(Big3CategoryDto::from).collect(Collectors.toList());
     }
 
     public Boolean saveLike(Long category_id, Long member_id) {
