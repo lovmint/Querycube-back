@@ -25,8 +25,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long member_id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Region region_id;
 
     private String username;
     private String password; // Add this property
