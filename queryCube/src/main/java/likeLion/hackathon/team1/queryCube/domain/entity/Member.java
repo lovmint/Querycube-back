@@ -31,9 +31,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long member_id;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Region region_id;
 
     private String name;
 
